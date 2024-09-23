@@ -1,0 +1,71 @@
+body {
+    background: black;
+}
+ 
+
+body {
+    background: black;
+}
+ 
+
+p {
+    margin-top: 50px;
+    text-align: center;
+    font-size: 60px;
+    font-family: 'arial';
+    color: rgb(255, 0, 0);
+    text-shadow: 0 0 5px rgb(255, 0, 0),
+        0 0 10px rgb(255, 0, 0),
+        0 0 20px rgb(255, 0, 0),
+        0 0 30px rgb(255, 0, 0),
+        0 0 40px rgb(255, 0, 0),
+        0 0 55px rgb(255, 0, 0),
+        0 0 70px rgb(255, 0, 0)
+}
+@property --k {
+	syntax: '<number>';
+	initial-value: 0;
+	inherits: false
+}
+
+html, body { display: grid }
+
+html { height: 0% }
+
+body { background: #000 }
+
+svg[height='0'] { position: absolute }
+
+h1 { /* no pseudo needed */
+	--k: 0;
+	place-self: center;
+	background: 
+		linear-gradient(180deg, 
+				hsl(calc(var(--k)*1turn), 95%, 65%), 
+				hsl(calc(var(--k)*1turn + 90deg), 95%, 65%)) text;
+	color: transparent;
+	font: 900 clamp(.875em, 7.25vw, 5em) arial black, arial;
+	filter: url(#f);
+	text-align: center;
+	text-transform: lowercase;
+	/* needs support for animating custom properties */
+	/* Firefox not quite there yet, but it's coming */
+	animation: k 5s linear infinite
+}
+
+@keyframes k { to { --k: 1 } }
+
+h2 {
+    margin-top: 150px;
+    text-align: center;
+    font-size: 30px;
+    font-family: 'arial';
+    color: #ffffff;
+    text-shadow: 0 0 2px #fff,
+        0 0 10px #fff,
+        0 0 20px rgb(202, 202, 202),
+        0 0 30px rgb(202, 202, 202),
+        0 0 40px rgb(202, 202, 202),
+        0 0 55px rgb(202, 202, 202),
+        0 0 70px rgb(202, 202, 202);
+}
