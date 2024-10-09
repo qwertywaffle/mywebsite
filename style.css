@@ -1,18 +1,31 @@
 body {
-    background: black;
+    background-position: top
 }
- 
-
 body {
-    background: black;
+    background-image: url(background.png)
 }
- 
+body {
+    background-color: black
+}
+
+@font-face {
+    font-family: 'DosisExtraBold'; /*a name to be used later*/
+    src: url('Dosis-ExtraBold.ttf'); /*URL to font*/
+}
+@font-face {
+    font-family: 'DosisBold'; /*a name to be used later*/
+    src: url('Dosis-Bold.ttf'); /*URL to font*/
+}
+@font-face {
+    font-family: 'DosisMedium'; /*a name to be used later*/
+    src: url('Dosis-Medium.ttf'); /*URL to font*/
+}
 
 p {
     margin-top: 50px;
     text-align: center;
     font-size: 60px;
-    font-family: 'arial';
+    font-family: 'DosisMedium';
     color: rgb(255, 0, 0);
     text-shadow: 0 0 5px rgb(255, 0, 0),
         0 0 10px rgb(255, 0, 0),
@@ -32,7 +45,7 @@ html, body { display: grid }
 
 html { height: 0% }
 
-body { background: #000 }
+
 
 svg[height='0'] { position: absolute }
 
@@ -44,7 +57,7 @@ h1 {
 				hsl(calc(var(--k)*1turn), 95%, 65%), 
 				hsl(calc(var(--k)*1turn + 90deg), 95%, 65%)) text;
 	color: transparent;
-	font: 900 clamp(.875em, 7.25vw, 5em) arial black, arial;
+	font: 900 clamp(.875em, 7.25vw, 5em) DosisExtraBold, DosisExtraBold;
 	filter: url(#f);
 	text-align: center;
 	text-transform: lowercase;
@@ -57,7 +70,7 @@ h2 {
     margin-top: 150px;
     text-align: center;
     font-size: 30px;
-    font-family: 'arial';
+    font-family: 'DosisBold';
     color: orange;
     text-shadow: 0 0 2px orange,
         0 0 10px orange,
@@ -71,7 +84,7 @@ h3 {
     margin-top: 150px;
     text-align: center;
     font-size: 30px;
-    font-family: 'arial';
+    font-family: 'DosisBold';
     color: orange;
     text-shadow: 0 0 2px orange,
         0 0 10px orange,
