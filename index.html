@@ -3,10 +3,147 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
     <link rel="icon" href="favicon.ico" type="image/x-icon">
     <title>qwerty's website</title>
 </head>
+<style>
+    html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+body {
+    background-color: #0d0d0d;
+    color: #ffffff;
+    font-family: monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+    position: relative;
+}
+
+.ascii-title {
+    white-space: pre;
+    font-size: 18px;
+    margin-top: 20px;
+}
+
+
+
+h1 {
+	--k: 0;
+	place-self: center;
+	background: 
+		linear-gradient(180deg, 
+				hsl(calc(var(--k)*1turn), 95%, 65%), 
+				hsl(calc(var(--k)*1turn + 90deg), 95%, 65%)) text;
+	color: transparent;
+	font: 900 clamp(.875em, 7.25vw, 5em);
+	filter: url(#f);
+	text-align: center;
+	text-transform: lowercase;
+	animation: k 5s linear infinite
+}
+
+h1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -400%);
+    font-size: 48px;
+}
+
+pre {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -275%);
+    font-size: 48px;
+}
+
+pre {
+    text-shadow: 0 0 2px white,
+        0 0 10px white,
+        0 0 20px white,
+        0 0 30px white,
+        0 0 40px white,
+        0 0 55px white,
+        0 0 70px white;
+}
+
+p {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 48px;
+}
+
+p {
+    text-shadow: 0 0 2px red,
+        0 0 10px red,
+        0 0 20px red,
+        0 0 30px red,
+        0 0 40px red,
+        0 0 55px rgba(255, 255, 255, 0),
+        0 0 70px rgba(255, 255, 255, 0);
+}
+
+p1 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 300%);
+    font-size: 48px;
+}
+
+p1 {
+    text-shadow: 0 0 2px white,
+        0 0 10px white,
+        0 0 20px white,
+        0 0 30px white,
+        0 0 40px white,
+        0 0 55px rgba(255, 255, 255, 0),
+        0 0 70px rgba(255, 255, 255, 0);
+}
+
+p2 {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, 175%);
+    font-size: 48px;
+}
+
+.snowflakes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.snowflake {
+    position: absolute;
+    color: #ffffffa1;
+    font-size: 20px;
+    animation: fall linear infinite;
+}
+
+@keyframes fall {
+    0% {
+        transform: translateY(-100px) translateX(0);
+    }
+    100% {
+        transform: translateY(100vh) translateX(30px);
+    }
+}
+</style>
 <body>
 
     <div class="ascii-title">
