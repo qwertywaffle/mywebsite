@@ -1,22 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="favicon.ico" type="image/x-icon">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width,initial-scale=1.0">
-<title>qwerty's website</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="favicon.ico" type="image/x-icon">
+    <title>qwerty's website</title>
 </head>
 <body>
-<h1><sup>welcome</sup></h1>
-<h2 style="font-family: DosisBold; position: relative left; text-align: center; font-size: 50px; color: white;"><span><sup>minecraft server: mc.qwertywaffle.xyz (java 1.21.1)</sup></span></p>
-<h3 style="font-family: DosisBold; position: relative left; text-align: center; font-size: 45px; color: orange;"><span><sup>its spooky month!</sup></span></h3>
-<p style="font-family: DosisMedium; font-size: 25px; text-align: center;"><span style="color: #ff0000;"><a style="color: #ff0000;" title="subscribe" href="https://www.youtube.com/@qwerty_waffle" target="_blank"><sup>subscribe</sup><img src="waffle32.png" alt="waffle" width="32" height="32" /></a></span></p>
-<h2 style="font-family: DosisBold; position: relative left; text-align: center; font-size: 30px; color: white;"><span><sup>here's some music</sup></span></p>
-<h1 style="font-family: DosisMedium; font-size: 50px; text-align: center;"><span style="color: #ffffff;"><sup><em><strong><video controls="controls" width="300" height="80"> <source src="QWERTY.mp4" type="video/mp4" /></video></strong></em></sup></span></h1>
-<h2 style="font-family: DosisBold; position: relative left; text-align: center; font-size: 15px; color: white;"><span><sub>this website is still being worked on</sub></span></p>
+
+    <div class="ascii-title">
+        <pre style="text-align: center; font-size: 20px;">
+                     _                     __  __ _                   
+ __ ___ __ _____ _ _| |_ _  ___ __ ____ _ / _|/ _| |___  __ ___  _ ___
+/ _` \ V  V / -_) '_|  _| || \ V  V / _` |  _|  _| / -_)_\ \ / || |_ /
+\__, |\_/\_/\___|_|  \__|\_, |\_/\_/\__,_|_| |_| |_\___(_)_\_\\_, /__|
+   |_|                   |__/                                 |__/    
+        </pre>
+    </div>
+    
+
+    <h1><strong>welcome</strong></h1>
+
+    <p style="font-size: 25px; text-align: center;"><span style="color: #ff0000;"><a style="color: #ff0000;" title="subscribe" href="https://www.youtube.com/@qwerty_waffle" target="_blank"><sup>subscribe</sup><img src="waffle32.png" alt="waffle" width="32" height="32" /></a></span></p>
+    
+    <p1 style="position: relative left; text-align: center; font-size: 30px; color: white;"><span><sup>here's some music</sup></span></p1>
+    
+    <p2 style="font-size: 50px; text-align: center;"><span style="color: #000000;"><em><video controls="controls" width="300" height="80"> <source src="QWERTY.mp4" type="video/mp4" /></video></em></span></p2>
+
+    <div class="snowflakes"></div>
+
+    <script>
+        function createSnowflakes(num) {
+            const snowflakesContainer = document.querySelector('.snowflakes');
+            for (let i = 0; i < num; i++) {
+                const snowflake = document.createElement('div');
+                snowflake.classList.add('snowflake');
+                snowflake.textContent = '*';
+                snowflake.style.left = `${Math.random() * 100}vw`;
+                snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                snowflake.style.animationDelay = `${Math.random() * 3}s`;
+                snowflakesContainer.appendChild(snowflake);
+            }
+        }
+
+        createSnowflakes(50);
+    </script>
+
 </body>
 </html>
