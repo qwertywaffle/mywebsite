@@ -31,7 +31,6 @@ body {
         }
 
 body {
-    background-color: #0d0d0d;
     color: #ffffff;
     font-family: monospace;
     display: flex;
@@ -48,7 +47,27 @@ body {
     margin-top: 20px;
 }
 
+body {
+  background: linear-gradient(-180deg, #ffffff 0%, #ffffff 13%, #0f0f0f 25%, #0e0e0e 38%, #0d0d0d 50%, #0c0c0c 62%, #000000 75%, #ffffff 87%, #ffffff 100%);
+  background-size:  400% 400%;
+  animation: gradient 20s ease infinite;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
+@keyframes gradient {
+  0% {
+    background-position: 0%;
+  }
+  50% {
+    background-position: 100%;
+  }
+  100% {
+    background-position: 0%;
+  }
+}
 
 h1 {
 	--k: 0;
