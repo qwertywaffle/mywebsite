@@ -15,22 +15,6 @@
 }
 
 body {
-            animation: fadeInAnimation ease 2s;
-            animation-iteration-count: 1;
-            animation-fill-mode: forwards;
-        }
-
-        @keyframes fadeInAnimation {
-            0% {
-                opacity: 0;
-            }
-
-            100% {
-                opacity: 1;
-            }
-        }
-
-body {
     color: #ffffff;
     font-family: monospace;
     display: flex;
@@ -48,7 +32,7 @@ body {
 }
 
 body {
-  background: linear-gradient(-180deg, #ffffff 0%, #ffffff 13%, #0f0f0f 25%, #0e0e0e 38%, #0d0d0d 50%, #0c0c0c 62%, #000000 75%, #ffffff 87%, #ffffff 100%);
+  background: linear-gradient(-180deg, #0d0d0d 0%, #0a0a0a 13%, #0b0b0b 25%, #0c0c0c 38%, #0d0d0d 50%, #0c0c0c 62%, #0b0b0b 75%, #000000 87%, #000000 100%);
   background-size:  400% 400%;
   animation: gradient 20s ease infinite;
   height: 100vh;
@@ -72,10 +56,7 @@ body {
 h1 {
 	--k: 0;
 	place-self: center;
-	background: 
-		linear-gradient(180deg, 
-				hsl(calc(var(--k)*1turn), 95%, 65%), 
-				hsl(calc(var(--k)*1turn + 90deg), 95%, 65%)) text;
+    background: linear-gradient(-180deg, #ffffff 0%, #d8d8d8 13%, #b8b8b8 25%, #aaaaaa 38%, #949494 50%, #707070 62%, #555555 75%, #4d4d4d 87%, #303030 100%) text;
 	color: transparent;
 	font: 900 clamp(.875em, 7.25vw, 5em);
 	filter: url(#f);
@@ -154,6 +135,23 @@ p2 {
     font-size: 48px;
 }
 
+body {
+            animation: fadeInAnimation ease-in-out 3s;
+            animation-iteration-count: 1;
+            animation-fill-mode: forwards;
+        }
+
+        @keyframes fadeInAnimation {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+
 .snowflakes {
     position: absolute;
     top: 0;
@@ -167,7 +165,7 @@ p2 {
     position: absolute;
     color: #ffffffa1;
     font-size: 20px;
-    animation: fall linear infinite;
+    animation: fall ease-in infinite;
 }
 
 @keyframes fall {
@@ -217,7 +215,7 @@ p2 {
             }
         }
 
-        createSnowflakes(50);
+        createSnowflakes(100);
     </script>
 
 </body>
