@@ -196,12 +196,19 @@ body {
     
     <p1 style="position: relative left; text-align: center; font-size: 30px; color: white;"><span><sup>here's some music</sup></span></p1>
     
-    <p2><span style="color: #000000;"><audio controls autoplay="controls" width="300" height="80"> <source src="QWERTY.mp4" type="video/mp4" /></audio></span></p2>
+    <p2><span style="color: #000000;"><audio id="mus" controls autoplay="controls" width="300" height="80"> <source src="QWERTY.mp4" type="video/mp4" /></audio></span></p2>
 </body>
 <body>
     <div class="snowflakes"></div>
 
     <script>
+            let vid = document.getElementById("mus");
+    vid.volume = 0.3;
+document.addEventListener('click', musicPlay);
+function musicPlay() {
+    document.getElementById('mus').play();
+    document.removeEventListener('click', musicPlay);
+}
         function createSnowflakes(num) {
             const snowflakesContainer = document.querySelector('.snowflakes');
             for (let i = 0; i < num; i++) {
