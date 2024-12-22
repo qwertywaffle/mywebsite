@@ -7,6 +7,7 @@
     <title>qwerty's website</title>
 </head>
 <style>
+    
     html, body {
     height: 100%;
     margin: 0;
@@ -32,8 +33,8 @@ body {
 }
 
 body {
-  background: linear-gradient(-180deg, #0d0d0d 0%, #0a0a0a 13%, #0b0b0b 25%, #0c0c0c 38%, #0d0d0d 50%, #0c0c0c 62%, #0b0b0b 75%, #000000 87%, #000000 100%);
-  background-size:  400% 400%;
+  background: linear-gradient(-180deg, #0a0a0a 0%, #000 100%);
+  background-size:  1% 200%;
   animation: gradient 20s ease infinite;
   height: 100vh;
   display: flex;
@@ -82,6 +83,7 @@ pre {
 }
 
 pre {
+    font-size: calc(0.7vw + 0.7vh);
     text-shadow: 0 0 2px white,
         0 0 10px white,
         0 0 20px white,
@@ -100,6 +102,7 @@ p {
 }
 
 p {
+    font-size: calc(1vw + 1vh);
     text-shadow: 0 0 2px red,
         0 0 10px red,
         0 0 20px red,
@@ -118,6 +121,7 @@ p1 {
 }
 
 p1 {
+    font-size: calc(1vw + 1vh);
     text-shadow: 0 0 2px white,
         0 0 10px white,
         0 0 20px white,
@@ -128,6 +132,7 @@ p1 {
 }
 
 p2 {
+    
     position: absolute;
     top: 50%;
     left: 50%;
@@ -180,7 +185,7 @@ body {
 <body>
 
     <div class="ascii-title">
-        <pre style="text-align: center; font-size: 20px;">
+        <pre style="text-align: center;">
                      _                     __  __ _                   
  __ ___ __ _____ _ _| |_ _  ___ __ ____ _ / _|/ _| |___  __ ___  _ ___
 / _` \ V  V / -_) '_|  _| || \ V  V / _` |  _|  _| / -_)_\ \ / || |_ /
@@ -190,13 +195,13 @@ body {
     </div>
     
 
-    <h1><strong>welcome</strong></h1>
+    <h1 style="font-size: 2vw;"><strong>welcome</strong></h1>
 
-    <p style="font-size: 25px; text-align: center;"><span style="color: #ff0000;"><a style="color: #ff0000;" title="subscribe" href="https://www.youtube.com/@qwerty_waffle" target="_blank"><sup>subscribe</sup><img src="waffle32.png" alt="waffle" width="32" height="32" /></a></span></p>
+    <p style="text-align: center;"><span style="color: #ff0000;"><a style="color: #ff0000;" title="subscribe" href="https://www.youtube.com/@qwerty_waffle" target="_blank"><sup>subscribe</sup></a></span></p>
     
-    <p1 style="position: relative left; text-align: center; font-size: 30px; color: white;"><span><sup>here's some music</sup></span></p1>
+    <p1 style="position: relative left; text-align: center; color: white;"><span><sup>here's some music</sup></span></p1>
     
-    <p2><span style="color: #000000;"><audio id="mus" controls autoplay="controls" width="300" height="80"> <source src="QWERTY.mp4" type="video/mp4" /></audio></span></p2>
+    <p2><span style="color: #000000;"><audio id="mus" controls autoplay="controls" width="300" height="80"> <source src="https://www.qwertywaffle.xyz/QWERTY.mp4" type="video/mp4" /></audio></span></p2>
 </body>
 <body>
     <div class="snowflakes"></div>
@@ -214,7 +219,7 @@ function musicPlay() {
             for (let i = 0; i < num; i++) {
                 const snowflake = document.createElement('div');
                 snowflake.classList.add('snowflake');
-                snowflake.textContent = '*';
+                snowflake.textContent = '❄';
                 snowflake.style.left = `${Math.random() * 100}vw`;
                 snowflake.style.animationDuration = `${Math.random() * 3 + 2}s`;
                 snowflake.style.animationDelay = `${Math.random() * 3}s`;
@@ -222,7 +227,7 @@ function musicPlay() {
             }
         }
 
-        createSnowflakes(100);
+        createSnowflakes(75);
     </script>
 
 </body>
