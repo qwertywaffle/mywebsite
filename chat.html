@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>random chat app</title>
+  <style>
+    :root {
+      --bg: #1e1e2f;
+      --panel: #2a2a3d;
+      --text: #e0e0e0;
+      --accent: #7D5FFF;
+      --input-bg: #3a3a50;
+    }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+    }
+
+    #chat {
+      max-width: 600px;
+      margin: auto;
+      background: var(--panel);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: var(--accent);
+    }
+
+    input, button {
+      background: var(--input-bg);
+      color: var(--text);
+      border: 1px solid #555;
+      border-radius: 6px;
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    input:focus, button:hover {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    #messages {
+      height: 300px;
+      overflow-y: auto;
+      background: #191927;
+      border: 1px solid #333;
+      padding: 10px;
+      margin-top: 15px;
+      border-radius: 8px;
+    }
+
+    .message {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .message img {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    #input {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    #input input {
+      flex: 1;
+    }
+  </style>
+</head>
+<body>
+  <div id="chat">
+    <h2 style="text-align: center;">some random chat app that totally isnt skidded</h2>
+    <div>
+      <input type="text" id="username" placeholder="put your name here">
+      <input type="text" id="avatar" placeholder="(optional) avatar url">
+      <button onclick="connect()">start chatting</button>
+    </div>
+    <div id="messages"></div>
+    <div id="input" style="display:none;">
+      <input id="messageInput" placeholder="type something">
+      <button onclick="sendMessage()">send</button>
+    </div>
+  </div>
+
+  <script src="client.js"></script>
+</body>
+</html>
