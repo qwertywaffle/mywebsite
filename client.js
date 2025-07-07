@@ -8,7 +8,7 @@ function connect() {
 
   if (!username) return alert("enter a name");
 
-  socket = new WebSocket("ws://s.qwertywaffle.xyz:11311");
+  socket = new WebSocket("wss://s.qwertywaffle.xyz:11311");
 
   socket.onopen = () => {
     document.getElementById('input').style.display = 'flex';
