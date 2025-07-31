@@ -3,11 +3,29 @@
 <head>
   <title>image to audio</title>
   <style>
+    body {
+      background-color: #000;
+      color: #00ff88;
+      font-family: 'Courier New', monospace;
+      text-transform: lowercase;
+      text-shadow: 0 0 5px #00ff88;
+      padding: 20px;
+    }
     canvas#oscilloscope {
-      border: 1px solid #ccc;
+      border: 1px solid #00ff88;
+      display: block;
       width: 100%;
       height: 150px;
-      display: block;
+      margin-top: 10px;
+    }
+    button, input {
+      background-color: #001f1a;
+      color: #00ff88;
+      border: 1px solid #00ff88;
+      font-family: 'Courier New', monospace;
+      text-transform: lowercase;
+      padding: 8px;
+      margin: 5px 0;
     }
   </style>
 </head>
@@ -36,7 +54,7 @@
         setTimeout(() => {
           requestAnimationFrame(drawFrame);
           analyser.getByteTimeDomainData(dataArray);
-          oscCtx.fillStyle = '#111';
+          oscCtx.fillStyle = '#000';
           oscCtx.fillRect(0, 0, oscCanvas.width, oscCanvas.height);
 
           let sum = 0;
@@ -82,11 +100,11 @@
         let sampleRate = (data[0] << 8) + data[1];
         if (sampleRate < 3000 || sampleRate > 96000) {
           sampleRate = 44100;
-          console.warn("Invalid metadata. Using 44100 Hz.");
+          console.warn("invalid metadata. using 44100 hz.");
         }
 
         try {
-          const sampleBytes = data.slice(4); // Skip first pixel (metadata)
+          const sampleBytes = data.slice(4);
           const sampleCount = sampleBytes.length;
           const samples = new Float32Array(sampleCount);
           for (let i = 0; i < sampleCount; i++) {
@@ -95,17 +113,17 @@
 
           audioBuffer = audioCtx.createBuffer(1, samples.length, sampleRate);
           audioBuffer.copyToChannel(samples, 0);
-          console.log(`Decoded ${samples.length} samples at ${sampleRate} Hz`);
+          console.log(`decoded ${samples.length} samples at ${sampleRate} hz`);
         } catch (e) {
           audioBuffer = null;
-          alert("Error decoding image audio.");
+          alert("error decoding image audio.");
         }
       };
     });
 
     function playAudio() {
       if (!audioBuffer) {
-        alert("No valid audio loaded.");
+        alert("no valid audio loaded.");
         return;
       }
 
