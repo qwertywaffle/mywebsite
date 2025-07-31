@@ -2,6 +2,28 @@
 <html>
 <head>
   <title>audio to image</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #00ff88;
+      font-family: 'Courier New', monospace;
+      text-transform: lowercase;
+      text-shadow: 0 0 5px #00ff88;
+      padding: 20px;
+    }
+    button, input, a {
+      background-color: #001f1a;
+      color: #00ff88;
+      border: 1px solid #00ff88;
+      font-family: 'Courier New', monospace;
+      text-transform: lowercase;
+      padding: 8px;
+      margin: 5px 0;
+    }
+    a {
+      display: inline-block;
+    }
+  </style>
 </head>
 <body>
   <h2>audio to image</h2>
@@ -14,7 +36,7 @@
   <script>
     document.getElementById('convertBtn').onclick = async () => {
       const file = document.getElementById('audioInput').files[0];
-      if (!file) return alert("Please select an audio file first.");
+      if (!file) return alert("please select an audio file first.");
 
       const arrayBuffer = await file.arrayBuffer();
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -22,12 +44,11 @@
       const samples = audioBuffer.getChannelData(0);
       const sampleRate = audioBuffer.sampleRate;
 
-      const totalPixels = Math.ceil(samples.length / 4) + 1; // 4 samples per pixel, 1 pixel for metadata
+      const totalPixels = Math.ceil(samples.length / 4) + 1;
       const width = Math.ceil(Math.sqrt(totalPixels));
       const height = Math.ceil(totalPixels / width);
       const pixelData = new Uint8ClampedArray(width * height * 4);
 
-      // First pixel: store sample rate (16-bit)
       pixelData[0] = (sampleRate >> 8) & 0xFF;
       pixelData[1] = sampleRate & 0xFF;
       pixelData[2] = 0;
