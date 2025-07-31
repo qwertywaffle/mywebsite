@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>audio to image</title>
+</head>
+<body>
+  <h2>audio to image</h2>
+  <input type="file" accept="audio/*" id="audioInput"><br><br>
+  <button id="convertBtn">convert</button>
+  <br><br>
+  <canvas id="canvas" style="display: none;"></canvas>
+  <a id="downloadLink" download="audio-image.png" style="display:none;">download</a>
+
+  <script>
+    document.getElementById('convertBtn').onclick = async () => {
+      const file = document.getElementById('audioInput').files[0];
+      if (!file) return alert("Please select an audio file first.");
+
+      const arrayBuffer = await file.arrayBuffer();
+      const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+      const samples = audioBuffer.getChannelData(0);
+      const sampleRate = audioBuffer.sampleRate;
+
+      const totalPixels = Math.ceil(samples.length / 4) + 1; // 4 samples per pixel, 1 pixel for metadata
+      const width = Math.ceil(Math.sqrt(totalPixels));
+      const height = Math.ceil(totalPixels / width);
+      const pixelData = new Uint8ClampedArray(width * height * 4);
+
+      // First pixel: store sample rate (16-bit)
+      pixelData[0] = (sampleRate >> 8) & 0xFF;
+      pixelData[1] = sampleRate & 0xFF;
+      pixelData[2] = 0;
+      pixelData[3] = 255;
+
+      let sampleIndex = 0;
+      for (let i = 1; i < totalPixels; i++) {
+        const dataIndex = i * 4;
+        for (let c = 0; c < 4; c++) {
+          const val = samples[sampleIndex++] || 0;
+          pixelData[dataIndex + c] = Math.max(0, Math.min(255, Math.round((val + 1) * 127.5)));
+        }
+      }
+
+      const canvas = document.getElementById('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d');
+      const imageData = new ImageData(pixelData, width, height);
+      ctx.putImageData(imageData, 0, 0);
+
+      const link = document.getElementById('downloadLink');
+      link.href = canvas.toDataURL("image/png");
+      link.style.display = 'inline';
+      link.textContent = 'download';
+    };
+  </script>
+</body>
+</html>
