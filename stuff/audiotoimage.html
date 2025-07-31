@@ -1,80 +1,98 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>audio to image (16-bit stereo)</title>
+  <title>audio to image (debug)</title>
   <style>
-    body { background: #000; color: #0f8; font-family: monospace; padding: 20px; }
-    input, button, a {
-      background: #001f1a; color: #0f8; border: 1px solid #0f8;
-      font-family: monospace; padding: 8px; margin-top: 10px;
+    body {
+      background-color: #000;
+      color: #00ff88;
+      font-family: 'Courier New', monospace;
+      text-transform: lowercase;
+      text-shadow: 0 0 5px #00ff88;
+      padding: 20px;
     }
-    #log { margin-top: 10px; white-space: pre-wrap; border: 1px solid #0f8; padding: 10px; height: 200px; overflow-y: auto; }
+    input, button, a {
+      background-color: #001f1a;
+      color: #00ff88;
+      border: 1px solid #00ff88;
+      font-family: 'Courier New', monospace;
+      padding: 8px;
+      margin: 5px 0;
+    }
+    #log {
+      white-space: pre-wrap;
+      background-color: #001f1a;
+      border: 1px solid #00ff88;
+      padding: 10px;
+      margin-top: 10px;
+      height: 200px;
+      overflow-y: auto;
+      font-size: 12px;
+    }
   </style>
 </head>
 <body>
-  <h2>audio to image (16-bit stereo)</h2>
-  <input type="file" id="audioInput" accept="audio/*"><br>
-  <button onclick="convertAudio()">convert</button>
-  <a id="downloadLink" download="audio-image.png" style="display:none;">download audio-image.png</a>
+  <h2>audio to image (debug)</h2>
+  <input type="file" accept="audio/*" id="audioInput"><br>
+  <button id="convertBtn">convert</button>
+  <a id="downloadLink" download="audio-image.png" style="display:none;">download</a>
   <canvas id="canvas" style="display:none;"></canvas>
   <div id="log"></div>
 
   <script>
-    const log = msg => {
-      const box = document.getElementById('log');
-      box.textContent += msg + '\n';
-      box.scrollTop = box.scrollHeight;
+    const logBox = document.getElementById('log');
+    const log = (msg) => {
       console.log(msg);
+      logBox.textContent += msg + '\n';
+      logBox.scrollTop = logBox.scrollHeight;
     };
 
-    async function convertAudio() {
+    document.getElementById('convertBtn').onclick = async () => {
       const file = document.getElementById('audioInput').files[0];
-      if (!file) return alert('Select an audio file first.');
-      document.getElementById('log').textContent = '';
-      log(`📥 selected: ${file.name}`);
+      if (!file) return alert("please select an audio file first.");
+
+      logBox.textContent = '';
+      log(`📥 selected: ${file.name} (${Math.round(file.size/1024)} KB)`);
 
       const arrayBuffer = await file.arrayBuffer();
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
+      let samples = audioBuffer.getChannelData(0).slice(); // clone
       const sampleRate = audioBuffer.sampleRate;
-      const left = audioBuffer.getChannelData(0);
-      const right = audioBuffer.numberOfChannels > 1 ? audioBuffer.getChannelData(1) : left;
 
-      const sampleCount = Math.min(left.length, right.length);
-      const bytesNeeded = 12 + (sampleCount * 4); // 12 bytes metadata, 4 bytes per stereo sample
-      const pixelCount = Math.ceil(bytesNeeded / 4);
-      const width = Math.ceil(Math.sqrt(pixelCount));
-      const height = Math.ceil(pixelCount / width);
-      const pixelData = new Uint8ClampedArray(width * height * 4);
+      log(`🔊 sample rate: ${sampleRate} Hz`);
+      log(`🔉 total samples: ${samples.length}`);
 
-      // --- metadata: 3 pixels (12 bytes)
-      const metadata = [
-        0xA0, 0x16,                             // magic header
-        (sampleRate >> 8) & 0xFF,
-        sampleRate & 0xFF,
-        (sampleCount >> 24) & 0xFF,
-        (sampleCount >> 16) & 0xFF,
-        (sampleCount >> 8) & 0xFF,
-        sampleCount & 0xFF,
-        0x00, 0x00, 0x00, 0xFF                  // filler (can use for flags)
-      ];
-      for (let i = 0; i < 12; i++) pixelData[i] = metadata[i];
-
-      // --- encode audio
-      let byteIndex = 12;
-      for (let i = 0; i < sampleCount; i++) {
-        const l = Math.max(-1, Math.min(1, left[i]));
-        const r = Math.max(-1, Math.min(1, right[i]));
-        const l16 = Math.round((l + 1) * 32767.5);
-        const r16 = Math.round((r + 1) * 32767.5);
-
-        pixelData[byteIndex++] = (l16 >> 8) & 0xFF;
-        pixelData[byteIndex++] = l16 & 0xFF;
-        pixelData[byteIndex++] = (r16 >> 8) & 0xFF;
-        pixelData[byteIndex++] = r16 & 0xFF;
+      // Normalize samples
+      let peak = 0;
+      for (let i = 0; i < samples.length; i++) {
+        if (Math.abs(samples[i]) > peak) peak = Math.abs(samples[i]);
+      }
+      if (peak < 1e-5) peak = 1;
+      for (let i = 0; i < samples.length; i++) {
+        samples[i] /= peak;
       }
 
-      // --- write image
+      const totalPixels = Math.ceil(samples.length / 4) + 1;
+      const width = Math.ceil(Math.sqrt(totalPixels));
+      const height = Math.ceil(totalPixels / width);
+      log(`🖼 image size: ${width} x ${height}`);
+
+      const pixelData = new Uint8ClampedArray(width * height * 4);
+      pixelData[0] = (sampleRate >> 8) & 0xFF;
+      pixelData[1] = sampleRate & 0xFF;
+      pixelData[2] = 0;
+      pixelData[3] = 255;
+
+      let sampleIndex = 0;
+      for (let i = 1; i < totalPixels; i++) {
+        const dataIndex = i * 4;
+        for (let c = 0; c < 4; c++) {
+          const val = samples[sampleIndex++] || 0;
+          pixelData[dataIndex + c] = Math.max(0, Math.min(255, Math.round((val + 1) * 127.5)));
+        }
+      }
+
       const canvas = document.getElementById('canvas');
       canvas.width = width;
       canvas.height = height;
@@ -85,13 +103,10 @@
       const link = document.getElementById('downloadLink');
       link.href = canvas.toDataURL("image/png");
       link.style.display = 'inline';
+      link.textContent = 'download audio-image.png';
 
-      log(`🎚 sample rate: ${sampleRate}`);
-      log(`🎧 channels: stereo`);
-      log(`🧪 samples: ${sampleCount}`);
-      log(`🖼 image size: ${width}x${height}`);
-      log(`✅ conversion complete.`);
-    }
+      log(`✅ encoding complete. click download to save image.`);
+    };
   </script>
 </body>
 </html>
