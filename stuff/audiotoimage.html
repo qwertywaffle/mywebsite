@@ -57,11 +57,21 @@
       const arrayBuffer = await file.arrayBuffer();
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-      const samples = audioBuffer.getChannelData(0);
+      let samples = audioBuffer.getChannelData(0).slice(); // clone
       const sampleRate = audioBuffer.sampleRate;
 
       log(`🔊 sample rate: ${sampleRate} Hz`);
       log(`🔉 total samples: ${samples.length}`);
+
+      // Normalize samples
+      let peak = 0;
+      for (let i = 0; i < samples.length; i++) {
+        if (Math.abs(samples[i]) > peak) peak = Math.abs(samples[i]);
+      }
+      if (peak < 1e-5) peak = 1;
+      for (let i = 0; i < samples.length; i++) {
+        samples[i] /= peak;
+      }
 
       const totalPixels = Math.ceil(samples.length / 4) + 1;
       const width = Math.ceil(Math.sqrt(totalPixels));
