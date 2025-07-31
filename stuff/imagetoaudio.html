@@ -46,18 +46,21 @@
         ctx.drawImage(img, 0, 0);
         const data = ctx.getImageData(0, 0, img.width, img.height).data;
 
-        const header = data.slice(0, 8);
-        const sampleRate = (header[2] << 8) + header[3];
-        const sampleCount = (header[4] << 24) | (header[5] << 16) | (header[6] << 8) | header[7];
-
-        if (header[0] !== 0xA0 || header[1] !== 0x16 || sampleRate < 3000 || sampleRate > 192000) {
+        const header = data.slice(0, 12);
+        if (header[0] !== 0xA0 || header[1] !== 0x16) {
           log("❌ invalid metadata in image.");
           return;
         }
 
+        const sampleRate = (header[2] << 8) + header[3];
+        const sampleCount = (header[4] << 24) | (header[5] << 16) | (header[6] << 8) | header[7];
+
+        log(`🎚 sample rate: ${sampleRate}`);
+        log(`🎧 samples: ${sampleCount}`);
+
         const left = new Float32Array(sampleCount);
         const right = new Float32Array(sampleCount);
-        let byteIndex = 8;
+        let byteIndex = 12;
 
         for (let i = 0; i < sampleCount; i++) {
           const l16 = (data[byteIndex++] << 8) | data[byteIndex++];
@@ -69,8 +72,7 @@
         audioBuffer = audioCtx.createBuffer(2, sampleCount, sampleRate);
         audioBuffer.copyToChannel(left, 0);
         audioBuffer.copyToChannel(right, 1);
-
-        log(`🎧 decoded: ${sampleCount} samples @ ${sampleRate} Hz (stereo)`);
+        log(`✅ audio loaded.`);
       };
     });
 
