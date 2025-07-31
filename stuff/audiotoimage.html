@@ -15,7 +15,7 @@
   <h2>audio to image (16-bit stereo)</h2>
   <input type="file" id="audioInput" accept="audio/*"><br>
   <button onclick="convertAudio()">convert</button>
-  <a id="downloadLink" download="audio-image.png" style="display:none;">download</a>
+  <a id="downloadLink" download="audio-image.png" style="display:none;">download audio-image.png</a>
   <canvas id="canvas" style="display:none;"></canvas>
   <div id="log"></div>
 
@@ -41,25 +41,32 @@
       const right = audioBuffer.numberOfChannels > 1 ? audioBuffer.getChannelData(1) : left;
 
       const sampleCount = Math.min(left.length, right.length);
-      const metadata = [0xA0, 0x16, (sampleRate >> 8) & 0xFF, sampleRate & 0xFF,
-                        (sampleCount >> 24) & 0xFF, (sampleCount >> 16) & 0xFF,
-                        (sampleCount >> 8) & 0xFF, sampleCount & 0xFF];
-
-      const pixelCount = Math.ceil((sampleCount * 4 + metadata.length) / 4);
+      const bytesNeeded = 12 + (sampleCount * 4); // 12 bytes metadata, 4 bytes per stereo sample
+      const pixelCount = Math.ceil(bytesNeeded / 4);
       const width = Math.ceil(Math.sqrt(pixelCount));
       const height = Math.ceil(pixelCount / width);
       const pixelData = new Uint8ClampedArray(width * height * 4);
 
-      for (let i = 0; i < metadata.length; i++) {
-        pixelData[i] = metadata[i];
-      }
+      // --- metadata: 3 pixels (12 bytes)
+      const metadata = [
+        0xA0, 0x16,                             // magic header
+        (sampleRate >> 8) & 0xFF,
+        sampleRate & 0xFF,
+        (sampleCount >> 24) & 0xFF,
+        (sampleCount >> 16) & 0xFF,
+        (sampleCount >> 8) & 0xFF,
+        sampleCount & 0xFF,
+        0x00, 0x00, 0x00, 0xFF                  // filler (can use for flags)
+      ];
+      for (let i = 0; i < 12; i++) pixelData[i] = metadata[i];
 
-      let byteIndex = metadata.length;
+      // --- encode audio
+      let byteIndex = 12;
       for (let i = 0; i < sampleCount; i++) {
-        let l = Math.max(-1, Math.min(1, left[i]));
-        let r = Math.max(-1, Math.min(1, right[i]));
-        let l16 = Math.round((l + 1) * 32767.5);
-        let r16 = Math.round((r + 1) * 32767.5);
+        const l = Math.max(-1, Math.min(1, left[i]));
+        const r = Math.max(-1, Math.min(1, right[i]));
+        const l16 = Math.round((l + 1) * 32767.5);
+        const r16 = Math.round((r + 1) * 32767.5);
 
         pixelData[byteIndex++] = (l16 >> 8) & 0xFF;
         pixelData[byteIndex++] = l16 & 0xFF;
@@ -67,6 +74,7 @@
         pixelData[byteIndex++] = r16 & 0xFF;
       }
 
+      // --- write image
       const canvas = document.getElementById('canvas');
       canvas.width = width;
       canvas.height = height;
@@ -77,7 +85,6 @@
       const link = document.getElementById('downloadLink');
       link.href = canvas.toDataURL("image/png");
       link.style.display = 'inline';
-      link.textContent = 'download audio-image.png';
 
       log(`🎚 sample rate: ${sampleRate}`);
       log(`🎧 channels: stereo`);
