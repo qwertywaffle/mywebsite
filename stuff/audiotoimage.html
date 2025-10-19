@@ -62,11 +62,23 @@
 
       const arrayBuffer = await file.arrayBuffer();
       const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      const audioBuffer = await audioCtx.decodeAudioData(arrayBuffer);
-      let samples = audioBuffer.getChannelData(0).slice(); // clone
-      const sampleRate = audioBuffer.sampleRate;
+      const originalBuffer = await audioCtx.decodeAudioData(arrayBuffer);
 
-      log(`🔊 sample rate: ${sampleRate} Hz`);
+      // Resample to 44100 Hz using OfflineAudioContext
+      const sampleRate = 44100;
+      const offlineCtx = new OfflineAudioContext(
+        1,
+        Math.ceil(originalBuffer.length * sampleRate / originalBuffer.sampleRate),
+        sampleRate
+      );
+      const source = offlineCtx.createBufferSource();
+      source.buffer = originalBuffer;
+      source.connect(offlineCtx.destination);
+      source.start(0);
+      const renderedBuffer = await offlineCtx.startRendering();
+      let samples = renderedBuffer.getChannelData(0).slice();
+
+      log(`🔊 (original: ${originalBuffer.sampleRate} Hz) resampled to ${sampleRate} Hz`);
       log(`🔉 total samples: ${samples.length}`);
 
       // Normalize samples
@@ -79,17 +91,21 @@
         samples[i] /= peak;
       }
 
+      // Compute image dimensions
       const totalPixels = Math.ceil(samples.length / 4) + 1;
       const width = Math.ceil(Math.sqrt(totalPixels));
       const height = Math.ceil(totalPixels / width);
       log(`🖼 image size: ${width} x ${height}`);
 
       const pixelData = new Uint8ClampedArray(width * height * 4);
-      pixelData[0] = (sampleRate >> 8) & 0xFF;
-      pixelData[1] = sampleRate & 0xFF;
-      pixelData[2] = 0;
-      pixelData[3] = 255;
 
+      // Store full 32-bit sample rate in first 4 bytes
+      pixelData[0] = (sampleRate >> 24) & 0xFF;
+      pixelData[1] = (sampleRate >> 16) & 0xFF;
+      pixelData[2] = (sampleRate >> 8) & 0xFF;
+      pixelData[3] = sampleRate & 0xFF;
+
+      // Encode samples to pixel RGBA bytes
       let sampleIndex = 0;
       for (let i = 1; i < totalPixels; i++) {
         const dataIndex = i * 4;
@@ -99,6 +115,7 @@
         }
       }
 
+      // Draw to canvas and export PNG
       const canvas = document.getElementById('canvas');
       canvas.width = width;
       canvas.height = height;

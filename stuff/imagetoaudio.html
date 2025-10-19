@@ -120,7 +120,7 @@
         log(`🖼 image size: ${img.width} x ${img.height}`);
         log(`🧩 pixel data length: ${data.length}`);
 
-        const sampleRate = (data[0] << 8) + data[1];
+        const sampleRate = ((data[0] * 16777216) + (data[1] << 16) + (data[2] << 8) + data[3]) >>> 0;
         if (sampleRate < 3000 || sampleRate > 96000) {
           log("⚠️ invalid sample rate. defaulting to 44100.");
         }
